@@ -33,9 +33,9 @@ func parseCmd() *Cmd {
 	args := flag.Args()
 	//如果args的长度大于0
 	if len(args) > 0 {
-		//将args[0]取出
+		//将args[0]取出赋值给class
 		cmd.class = args[0]
-		//
+		//将数组第二个元素到最后一个元素赋值给args
 		cmd.args = args[1:]
 	}
 

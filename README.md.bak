@@ -239,7 +239,7 @@ func printUsage() {
 #### 定义一个Entry接口
 将这个文件定义在classpath下，它的作用就如同Java中的接口一样，实现特定的一个类，然后重写方法，也用貌似Java中”多态“的感觉  
 代码如下：  
-**classpath/entry.go**  
+**entry.go**  
 ```go
 package classpath
 
@@ -281,7 +281,6 @@ func newEntry(path string) Entry {
 > c:/programmer/java1.8/jre   
 
 在此顺带一提的就是，在Go语言中，类对接口的实现不用写什么，直接去实现对应的方法就ok了，该go中的逻辑与实现过程都在代码中有注释，就不再做过多的解释
-**classpath/entry_dir.go**
 ```go
 package classpath
 
@@ -318,338 +317,16 @@ func (self *DirEntry) String() string  {
 	//返回路径
 	return self.absDir
 }
-```
-
 #### ZipEntry
 在4中形式中，这个实现对应的是后缀为.JAR或.ZIP的这种路径，如:  
 > c:/programmer/system64/test.jar
 
-**classpath/entry_zip.go**
-```go
-package classpath
-
-import (
-	"archive/zip"
-	"errors"
-	"io/ioutil"
-	"path/filepath"
-)
-
-type ZipEntry struct {
-	//存放ZIP或JAR文件的绝对路径
-	absPath string
-}
-
-func newZipEntry(path string) *ZipEntry{
-	absPath,err := filepath.Abs(path)
-	if err != nil{
-		panic(err)
-	}
-	return &ZipEntry{absPath}
-}
-
-func (self *ZipEntry) String() string{
-	return self.absPath
-}
-
-//如何从ZIP中提取class文件
-func (self *ZipEntry) readClass(className string) ([]byte, Entry, error)  {
-	//首先打开zip文件，如果出错就退出
-	r, err := zip.OpenReader(self.absPath)
-	if err != nil {
-		return nil, nil, err
-	}
-	//defer关键字的意思？
-
-	//保证打开的文件可以关闭
-	defer r.Close()
-	//迭代压缩文件中的文件
-	for _, f := range r.File {
-		if f.Name == className {
-			//再打开文件
-			rc, err := f.Open()
-			if err != nil {
-				return nil, nil, err
-			}
-			//关闭文件
-			defer rc.Close()
-			//把里面的内容全部都读了
-			data, err := ioutil.ReadAll(rc)
-			if err != nil {
-				return nil, nil, err
-			}
-			//将数据，实体，还有错误返回
-			return data, self, nil
-		}
-	}
-	//没有找到就包class not found
-	return nil, nil, errors.New("class not fount: " + className)
-}
-```
-#### CompositeEntry
-在4种形式中，这个实现对应的就是很一次传递多个路径的参数时所要进行使用的，如：
-> c:/programmer/system64/test.jar,c:/programmer/system64/lib
-
-**classpath/entry_composite.go**
-```go
-package classpath
-
-import "errors"
-import "strings"
-
-type CompositeEntry []Entry
-
-func newCompositeEntry(pathList string) CompositeEntry {
-	//创建一个silce切片就像java里面的动态数组一样
-	compositeEntry := []Entry{}
-	//这里使用的是for range循环，for _表示遍历数组的下标
-	for _, path := range strings.Split(pathList, pathListSeparartor){
-		//调用接口的方法
-		entry := newEntry(path)
-		//append是将每次循环的路径进行判断，然后添加到这个slice中
-		compositeEntry = append(compositeEntry,entry)
-	}
-	return compositeEntry
-}
-
-//实现接口的方法
-func (self CompositeEntry) readClass(className string) ([]byte,Entry,error)  {
-	//遍历数组，去读每一个class，如果出错，则返回，没有出错，就
-	for _, entry := range self{
-		data, from, err := entry.readClass(className)
-		if err == nil {
-			return data , from , nil
-		}
-	}
-	return nil, nil, errors.New("class not fount:" + className)
-}
-
-func (self CompositeEntry) String() string {
-	//创建了一个slice
-	strs := make([]string ,len(self))
-	//对数组中的每个值进行遍历，调用其的string方法
-	for i,entry := range self{
-		strs[i] = entry.String()
-	}
-	return strings.Join(strs,pathListSeparartor)
-}
-```
-#### WildcardEntry
-在4中形式中，这个实现对应的是存在通配符的路径形式，如:
-> c:/programmer/system64/*
-
-**classpath/entry_wildcard.go**
-```go
-package classpath
-
-import (
-	"os"
-	"path/filepath"
-	"strings"
-)
-
-//这个go是用来处理那些带有通配符的
-func newWildcardEntry(path string) CompositeEntry {
-	//创建了一个动态数组，从0到path的倒数第二个，去掉*号
-	baseDir := path[:len(path)-1]
-	//创建了一个数组
-	compositeEntry := []Entry{}
-	walkFn := func(path string, info os.FileInfo, err error) error {
-		//看看有没有错误，如果有错返回错误
-		if err != nil{
-			return err
-		}
-		//判断路径是不是存在而且路径不等于自己
-		//等于自己就说明，没有*号这个东西
-		if info.IsDir() && path != baseDir {
-			//符合要求则报错，跳出这个目录 skip this directory
-			return filepath.SkipDir
-		}
-		//如果后缀有.jar或者.JAR
-		if strings.HasSuffix(path, ".jar") || strings.HasSuffix(path, ".JAR"){
-			//创建一个实例
-			jarEntry := newZipEntry(path)
-			//把这个实例放进compositeEntry这个数组里
-			compositeEntry = append(compositeEntry, jarEntry)
-		}
-		return nil
-	}
-	//递归遍历目录
-	filepath.Walk(baseDir,walkFn)
-
-	return compositeEntry
-}
-
 
 ```
-#### Classpath
-这个结构体是用来将前面的各种实现与接口进行组合和调用  
-**classpath/classpath.go**
-```go
-package classpath
 
-import (
-	"os"
-	"path/filepath"
-)
 
-type Classpath struct {
-	bootClasspath Entry //jre/lib启动路径
-	extClasspath Entry //jre/ext/lib拓展路径
-	userClasspath Entry //用户自己定义classPath路径
-}
-//分别解析系统自带路径和用户定义的路径
-func Parse(jreOption, cpOption string) *Classpath {
-	cp := &Classpath{}//创建实体
-	cp.parseBootAndExtClasspath(jreOption)//从系统的库中去寻找
-	cp.parseUserClasspath(cpOption)//从用于定义的path中去寻找
-	return cp //返回寻找到的路径
-}
 
-//从系统的默认路径去寻找
-func (self *Classpath) parseBootAndExtClasspath(jreOption string)  {
-	//把路径传进去获取到jre所在的目录
-	jreDir := getJreDir(jreOption)
-	//去jre中的lib这个路径中寻找
-	jreLibpath := filepath.Join(jreDir, "lib", "*")
-	//实例一个通配符路径的entry，将里面的jar包都解析了，返回一个数组类型，全部存放jar包路径
-	self.bootClasspath = newWildcardEntry(jreLibpath)
-	//去拓展库里面找
-	jreExtPath := filepath.Join(jreDir, "lib", "ext", "*")
-	self.extClasspath = newWildcardEntry(jreExtPath)
-}
-//获得jre的路径
-func getJreDir(jreOption string) string {
-	//判断路径不为空且存在这个路劲
-	if jreOption != "" && exists(jreOption) {
-		//返回这个路劲
-		return jreOption
-	}
-	//为空或者不存在那个路径，看是不是存在jre这个目录
-	if exists("./jre") {
-		//返回./jre，表示这个路径中的jre目录
-		return "./jre"
-	}
-	//上面的都不对，那么去系统中的环境变量中寻找，且有这个环境变量
-	if jh := os.Getenv("JAVA_HOME"); jh != "" {
-		//将路径连接
-		return filepath.Join(jh,"jre")
-	}
-	panic("Can not find jre folder!")
-}
-//看是否存在某个路径
-func exists(path string) bool{
-	//看是否存在
-	if _, err := os.Stat(path); err != nil{
-		//出错了以后，判断是不是不存在这个路径的错误
-		if os.IsNotExist(err) {
-			return false
-		}
-	}
-	//存在这个路径
-	return true
-}
 
-func (self *Classpath) ReadClass(className string) ([]byte, Entry, error){
-	//给要找的class再路径上加上后缀
-	className = className + ".class"
-	//先从默认库中读，看有没有这个class
-	if data, entry, err := self.bootClasspath.readClass(className); err == nil {
-		return data, entry, err
-	}
-	//从拓展库里面读看有没有
-	if data, entry, err := self.extClasspath.readClass(className); err == nil {
-		return data,entry,err
-	}
-	//从用户自己的库里面读看有没有
-	return self.userClasspath.readClass(className)
-	//这里貌似就跟java一样了，到时候调用就到那些特定的类里面去调用特定的方法
-}
-
-//toString函数
-func (self *Classpath) String() string {
-	return self.userClasspath.String()
-}
-//如果用户-cp/-classPath为空，那么就让他为默认的本地路径
-func (self *Classpath) parseUserClasspath(cpOption string) {
-	if  cpOption == ""{
-		cpOption = "."
-	}
-	//一个普通的路径
-	self.userClasspath = newEntry(cpOption)
-}
-
-```
-#### 修改主类
-因为我们添加了很多的实现，所以我们要将其在主函数中可以调用，内容如下:   
-**ch02/main.go**
-```go
-package main
-
-import "fmt"
-import "strings"的
-import "jvmgo/ch02/classpath"
-
-func main() {
-	//实例化对象
-	cmd := parseCmd()
-	if cmd.versionFlag {
-		fmt.Println("version 0.0.1")
-	} else if cmd.helpFlag || cmd.class == "" {
-		printUsage()
-	} else {
-		startJVM(cmd)
-	}
-}
-//启动jvm
-func startJVM(cmd *Cmd) {
-	//将传进来的路径进行解虚
-	//一个是修改后的系统启动路径，一个是用户指定启动路径
-	cp := classpath.Parse(cmd.XjreOption, cmd.cpOption)
-	//输出找的路径
-	fmt.Printf("classpath:%v class:%v args:%v\n",cp, cmd.class, cmd.args)
-	//把原来的.都换成/，最后一个不转
-	className := strings.Replace(cmd.class, ".", "/", -1)
-	//从路径中读这个class的内容
-	classData, _, err := cp.ReadClass(className)
-	//看看报错不报错
-	if err != nil {
-		fmt.Print("Could not find or load main class %s\n",cmd.class)
-		return
-	}
-	//输出class内容
-	fmt.Printf("class data:%v\n", classData)
-}
-```
-#### 大功告成，只差测试
-1. 我们先对整个ch02进行编译，在bin目录下调用生成的exe，我们接下来使用它
-2. 打开终端，进入bin目录
-3. 执行命令
-> $ go_build_jvmgo_ch02 -Xjre "C:\programmer\Java_JDK1.8\jre" java.lang.Object
-> 这里go_build_jvmgo_ch02是我生成的可以执行的exe文件，这里换成你生成的文件
-
-4. 查看结果，如下图：  
-![显示结果][3]  
-
-虽然说现在的文件读出来的时二进制，但我觉得能把这个做出来真的真的很厉害。我一直在翻译这个go语言，我以前没有学过，有查资料，有学基础语法，中间很累，但我觉得当这个二进制文件显示在控制台的时候，这时才是对自己最大的奖励哈哈哈哈，so happy~  
-![开心][4]  
-
-## 三、解析class文件
-
-### Go和Java语言基本数据类型对照关系
-
-| Go语言类型    | Java语言类型 | 说明                 |
-| ------------- | ------------ | -------------------- |
-| int8          | byte         | 8比特有符号整数      |
-| uint8         | N/A          | 8比特无符号整数      |
-| int16         | short        | 16比特有符号整数     |
-| uint16        | char         | 16比特无符号整数     |
-| int32（rnme） | int          | 32比特有符号整数     |
-| uint32        | N/A          | 32比特无符号整数     |
-| int64         | long         | 64比特无符号整数     |
-| uint64        | N/A          | 64比特无符号整数     |
-| float32       | float        | 32比特IEEE-754浮点数 |
-| float64       | double       | 63比特IEEE-754浮点数 |
 
 
 
@@ -658,7 +335,6 @@ func startJVM(cmd *Cmd) {
   
 
 [1]: https:qiniuyun.ningdali.com/blog/19620jvm.png	"java自带的"
+
 [2]: https:qiniuyun.ningdali.com/blog/19620jvm1.png	"我们需要实现的"
-[3]: https:qiniuyun.ningdali.com/blog/19622jvm.png	"显示结果"
-[4]: https:qiniuyun.ningdali.com/blog/19622jvm1.jpeg	"开心"
 

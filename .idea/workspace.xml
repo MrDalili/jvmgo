@@ -2,13 +2,25 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="50e71ce7-eb91-4f3e-87f1-608aa2df2ad2" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/WritingJVM.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/jvmgo/ch01/main.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/jvmgo/ch03/classpath/classpath.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/jvmgo/ch03/classpath/entry.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/jvmgo/ch03/classpath/entry_composite.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/jvmgo/ch03/classpath/entry_dir.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/jvmgo/ch03/classpath/entry_wildcard.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/jvmgo/ch03/classpath/entry_zip.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/jvmgo/ch03/cmd.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/jvmgo/ch03/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/jvmgo/ch01/cmd.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/jvmgo/ch01/cmd.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jvmgo/ch02/classpath/classpath.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/jvmgo/ch02/classpath/classpath.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jvmgo/ch02/classpath/entry.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/jvmgo/ch02/classpath/entry.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jvmgo/ch02/classpath/entry_composite.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/jvmgo/ch02/classpath/entry_composite.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jvmgo/ch02/classpath/entry_dir.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/jvmgo/ch02/classpath/entry_dir.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jvmgo/ch02/classpath/entry_wildcard.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/jvmgo/ch02/classpath/entry_wildcard.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jvmgo/ch02/classpath/entry_zip.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/jvmgo/ch02/classpath/entry_zip.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jvmgo/ch02/cmd.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/jvmgo/ch02/cmd.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jvmgo/ch02/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/jvmgo/ch02/main.go" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -19,31 +31,35 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/jvmgo/ch01/cmd.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="230">
-              <caret line="19" column="17" lean-forward="true" selection-start-line="19" selection-start-column="17" selection-end-line="19" selection-end-column="17" />
-            </state>
-          </provider>
+        <entry file="file://$PROJECT_DIR$/src/jvmgo/ch03/classpath/entry_composite.go">
+          <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/README.md">
-          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-            <state split_layout="SPLIT">
-              <first_editor relative-caret-position="295">
-                <caret line="50" column="34" selection-start-line="50" selection-start-column="34" selection-end-line="50" selection-end-column="34" />
-              </first_editor>
-              <second_editor />
-            </state>
-          </provider>
+        <entry file="file://$PROJECT_DIR$/src/jvmgo/ch03/classpath/entry_dir.go">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/jvmgo/ch03/classpath/entry_wildcard.go">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/jvmgo/ch03/classpath/entry_zip.go">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/jvmgo/ch03/cmd.go">
+          <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/jvmgo/ch01/main.go">
+        <entry file="file://$PROJECT_DIR$/src/jvmgo/ch03/main.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="460">
-              <caret line="20" lean-forward="true" selection-start-line="20" selection-end-line="20" />
+            <state relative-caret-position="391">
+              <caret line="19" column="17" selection-start-line="19" selection-start-column="17" selection-end-line="19" selection-end-column="17" />
             </state>
           </provider>
         </entry>
@@ -74,16 +90,25 @@
         <option value="$PROJECT_DIR$/src/jvmgo/ch01/test.go" />
         <option value="$PROJECT_DIR$/bin/go_build_main_go.exe" />
         <option value="$PROJECT_DIR$/src/jvmgo/ch01/main.go" />
+        <option value="$PROJECT_DIR$/src/jvmgo/ch02/cmd.go" />
+        <option value="$PROJECT_DIR$/src/jvmgo/ch02/classpath/entry.go" />
+        <option value="$PROJECT_DIR$/src/jvmgo/ch02/classpath/entry_dir.go" />
+        <option value="$PROJECT_DIR$/src/jvmgo/ch02/classpath/CompositeEntry.go" />
+        <option value="$PROJECT_DIR$/src/jvmgo/ch02/classpath/entry_composite.go" />
+        <option value="$PROJECT_DIR$/src/jvmgo/ch02/classpath/entry_wildcard.go" />
+        <option value="$PROJECT_DIR$/src/jvmgo/ch02/classpath/entry_zip.go" />
+        <option value="$PROJECT_DIR$/src/jvmgo/ch02/classpath/classpath.go" />
+        <option value="$PROJECT_DIR$/src/jvmgo/ch02/main.go" />
         <option value="$PROJECT_DIR$/src/jvmgo/ch01/cmd.go" />
+        <option value="$PROJECT_DIR$/README.md.bak" />
         <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="342" />
-    <option name="y" value="220" />
-    <option name="width" value="2052" />
-    <option name="height" value="1323" />
+    <option name="x" value="-9" />
+    <option name="width" value="1293" />
+    <option name="height" value="702" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -91,7 +116,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -102,11 +126,6 @@
             <path>
               <item name="WritingJVM" type="b2602c69:ProjectViewProjectNode" />
               <item name="WritingJVM" type="462c0819:PsiDirectoryNode" />
-              <item name="bin" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="WritingJVM" type="b2602c69:ProjectViewProjectNode" />
-              <item name="WritingJVM" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -120,12 +139,25 @@
               <item name="WritingJVM" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="jvmgo" type="462c0819:PsiDirectoryNode" />
-              <item name="ch01" type="462c0819:PsiDirectoryNode" />
+              <item name="ch03" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="WritingJVM" type="b2602c69:ProjectViewProjectNode" />
+              <item name="WritingJVM" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="jvmgo" type="462c0819:PsiDirectoryNode" />
+              <item name="ch03" type="462c0819:PsiDirectoryNode" />
+              <item name="classpath" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="WritingJVM" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -141,10 +173,16 @@
     <property name="go.sdk.automatically.set" value="true" />
     <property name="js.buildTools.grunt.grunt-cli.package" value="" />
     <property name="js.buildTools.gulp.gulp_package_dir" value="" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/jvmgo/ch01" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/jvmgo/ch03" />
     <property name="nodejs.jest.jest_package" value="" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="terminal" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\27548\Desktop\WritingJVM\src\jvmgo\ch03" />
+      <recent name="C:\Users\27548\Desktop\WritingJVM\src\jvmgo\ch02" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -158,7 +196,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Go Build.go build jvmgo/ch01">
+  <component name="RunManager" selected="Go Build.go build jvmgo/ch02">
     <configuration name="go build jvmgo/ch01" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="WritingJVM" />
       <working_directory value="$PROJECT_DIR$/" />
@@ -168,12 +206,13 @@
       <output_directory value="C:\Users\27548\Desktop\WritingJVM\bin" />
       <method v="2" />
     </configuration>
-    <configuration name="go build main.go cmd.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+    <configuration name="go build jvmgo/ch02" type="GoApplicationRunConfiguration" factoryName="Go Application" nameIsGenerated="true">
       <module name="WritingJVM" />
       <working_directory value="$PROJECT_DIR$/" />
-      <kind value="FILE" />
-      <filePath value="$PROJECT_DIR$/src/jvmgo/ch01/main.go|C:\Users\27548\Desktop\WritingJVM\src\jvmgo\ch01\cmd.go" />
-      <directory value="$PROJECT_DIR$/" />
+      <go_parameters value="-i" />
+      <kind value="DIRECTORY" />
+      <filePath value="$PROJECT_DIR$/" />
+      <directory value="C:\Users\27548\Desktop\WritingJVM\src\jvmgo\ch02" />
       <output_directory value="C:\Users\27548\Desktop\WritingJVM\bin" />
       <method v="2" />
     </configuration>
@@ -191,6 +230,10 @@
       <envs />
       <method v="2" />
     </configuration>
+    <list>
+      <item itemvalue="Go Build.go build jvmgo/ch02" />
+      <item itemvalue="Go Build.go build jvmgo/ch01" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Go Build.go build jvmgo/ch01" />
@@ -199,14 +242,14 @@
     </recent_temporary>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1839" height="1191" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15160023" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.07249467" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3295562" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.28706327" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.28696606" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -214,8 +257,8 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="8" />
       <window_info anchor="bottom" id="Version Control" order="9" weight="0.3295562" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="10" visible="true" weight="0.3777148" />
-      <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="10" sideWeight="0.49781182" visible="true" weight="0.11713666" />
+      <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.5021882" side_tool="true" weight="0.381161" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -236,27 +279,156 @@
     <entry file="file://$PROJECT_DIR$/bin/go_build_main_go.exe" />
     <entry file="file://$PROJECT_DIR$/bin/go_build_main_go_cmd_go.exe" />
     <entry file="file://$PROJECT_DIR$/src/jvmgo/ch01/test.go" />
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="295">
-            <caret line="50" column="34" selection-start-line="50" selection-start-column="34" selection-end-line="50" selection-end-column="34" />
-          </first_editor>
-          <second_editor />
+    <entry file="file://C:/programmer/Go/src/strings/strings.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-281">
+          <caret line="446" column="21" selection-start-line="446" selection-start-column="21" selection-end-line="446" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/programmer/Go/src/path/filepath/path.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="412">
+          <caret line="408" column="10" lean-forward="true" selection-start-line="408" selection-start-column="10" selection-end-line="408" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/programmer/Go/src/os/types.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-669">
+          <caret line="25" column="36" selection-start-line="25" selection-start-column="36" selection-end-line="25" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/programmer/Go/src/os/error_windows.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="248">
+          <caret line="20" column="36" selection-start-line="20" selection-start-column="34" selection-end-line="20" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/programmer/Go/src/os/error.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="202">
+          <caret line="75" column="17" selection-start-line="75" selection-start-column="17" selection-end-line="75" selection-end-column="17" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/jvmgo/ch01/cmd.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="230">
-          <caret line="19" column="17" lean-forward="true" selection-start-line="19" selection-start-column="17" selection-end-line="19" selection-end-column="17" />
+        <state relative-caret-position="-116">
+          <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/jvmgo/ch01/main.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="460">
-          <caret line="20" lean-forward="true" selection-start-line="20" selection-end-line="20" />
+        <state relative-caret-position="276">
+          <caret line="12" column="21" lean-forward="true" selection-start-line="12" selection-start-column="21" selection-end-line="12" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/jvmgo/ch02/classpath/entry.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="243">
+          <caret line="15" column="1" lean-forward="true" selection-end-line="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="568">
+            <caret line="134" selection-start-line="44" selection-end-line="134" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/jvmgo/ch02/cmd.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="552">
+          <caret line="26" column="16" selection-end-line="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md.bak">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="7659">
+          <caret line="333" selection-start-line="333" selection-end-line="333" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/jvmgo/ch02/main.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="736">
+          <caret line="34" column="44" selection-start-line="34" selection-start-column="44" selection-end-line="34" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/jvmgo/ch02/classpath/entry_dir.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="690">
+          <caret line="31" column="20" selection-end-line="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/jvmgo/ch02/classpath/entry_zip.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="207">
+          <caret line="14" column="17" selection-end-line="60" />
+          <folding>
+            <element signature="e#19#84#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/jvmgo/ch02/classpath/entry_composite.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="276">
+          <caret line="13" column="13" selection-end-line="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/jvmgo/ch02/classpath/entry_wildcard.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="575">
+          <caret line="29" column="24" selection-end-line="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/jvmgo/ch02/classpath/classpath.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="299">
+          <caret line="16" column="41" selection-end-line="92" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/jvmgo/ch03/classpath/entry.go">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/jvmgo/ch03/classpath/classpath.go">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/jvmgo/ch03/classpath/entry_composite.go">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/jvmgo/ch03/classpath/entry_dir.go">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/jvmgo/ch03/classpath/entry_wildcard.go">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/jvmgo/ch03/classpath/entry_zip.go">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/jvmgo/ch03/cmd.go">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/jvmgo/ch03/main.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="19" column="17" selection-start-line="19" selection-start-column="17" selection-end-line="19" selection-end-column="17" />
         </state>
       </provider>
     </entry>
