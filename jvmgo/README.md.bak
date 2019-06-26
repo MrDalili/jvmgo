@@ -1,0 +1,340 @@
+# 手写JVM虚拟机
+
+## 我为什么想去自己实现一个JVM虚拟机
+
+我今天在图书馆借阅书籍的时候在《揭秘Java虚拟机》中看到了这么几句话。  
+
+> ​        被真相所蒙蔽，是一件痛苦的事。我们在一个被层层封装的世界里进行开发和设计，操作系统、各种中间件与框架，将底层世界隐藏的严严实实。我们一方面享受着高级编程语言所带来的高效、稳定、快速的开发体验，然而另一方面，却又如同行走于黑暗之中。我们不知道下面是否有坑，即使有坑，我们也不知道如何排除。  
+>
+> ​        我不知道Java能走多远，未来是否会被淘汰，但你不能因此就否定研究JVM的意义。    
+
+很喜欢这俩句话，我觉得说一个程序员不去研究底层，不去翻阅底层源码只会调用API无疑是一种悲哀。
+
+## 参考书籍
+
+ > 自己动手写Java虚拟机》——张秀宏  
+ >《揭秘Java虚拟机-JVM设计原理与实现》——封亚飞
+
+## 环境
+
+windows 10  
+
+JDK 1.8  
+
+Go 1.12.5  
+
+## 为什么使用Go语言
+
+- 你既然想写JVM，那就是你想离及计算机底层更近一些，所以排除JavaScript、python、Ruby等语言，而java又是本语言无挑战，c++又太难太复杂，c过于底层。
+- 它是编译型语言，接近底层
+- 语法很简洁，学习曲线平滑
+
+## 学习Go的简单语法以及一些常用的包
+
+### 语法
+
+参考菜鸟教程学习即可
+
+### 常用包
+
+- **flag包**  ：是用来实现命令行参数的解析
+- **fmt包**：用于在命令行输出和输入的
+- **os包**：用于解析电脑系统的相关包
+
+## 一、命令行工具
+
+在命令行中，Java是可以用命令进行调用，所以我们先使用go语言来编写一个很简单的，可以查看vision的命令工具，如下图  
+
+### 准备工作
+从跟目录开始配置整个项目目录  
+|-jvmgo  
+  |-ch01  
+    |-cmd.go  
+    |main.go  
+![Java在命令行中使用java -version][1]    
+
+![自己需要实现的-version][2]  
+
+在这之前我先说一句，所有代码的意思我不单独做说明，因为我已经几乎给每一句话打了注释  
++ 我们在workspace/src/ch01中新建一个cmd.go。用来解析如同java -version这种命令的
+```go
+package main
+
+//引包
+import "flag"
+import "fmt"
+import "os"
+
+//类似于java中类
+type Cmd struct {
+	helpFlag    bool
+	versionFlag bool
+	cpOption    string
+	class       string
+	args        []string
+}
+
+//方法
+func parseCmd() *Cmd {
+	//new一个Cmd
+	cmd := &Cmd{}
+
+	//调用方法
+	flag.Usage = printUsage
+	//如果是-help，那么显示这个，并将结果赋值给cmd结构体中的helpFlag，下面的大致都如此
+	flag.BoolVar(&cmd.helpFlag, "help", false, "print help message")
+	flag.BoolVar(&cmd.helpFlag, "?", false, "print help message")
+	flag.BoolVar(&cmd.versionFlag, "version", false, "print version and exit")
+	flag.StringVar(&cmd.cpOption, "classpath", "", "classpath")
+	flag.StringVar(&cmd.cpOption, "cp", "", "classpath")
+	flag.Parse()
+
+
+	args := flag.Args()
+	//如果args的长度大于0
+	if len(args) > 0 {
+		//将args[0]取出赋值给class
+		cmd.class = args[0]
+		//将数组第二个元素到最后一个元素赋值给args
+		cmd.args = args[1:]
+	}
+
+	return cmd
+}
+
+func printUsage() {
+	fmt.Printf("Usage: %s [-options] class [args...]\n", os.Args[0])
+	//flag.PrintDefaults()
+}
+```
++ 添加一个主类，用来运行整个程序  
+```go
+package main
+
+import "fmt"
+
+func main() {
+	cmd := parseCmd()
+
+	if cmd.versionFlag {
+		fmt.Println("version 0.0.1")
+	} else if cmd.helpFlag || cmd.class == "" {
+		printUsage()
+	} else {
+		startJVM(cmd)
+	}
+}
+
+func startJVM(cmd *Cmd) {
+	fmt.Printf("classpath:%s class:%s args:%v\n",
+		cmd.cpOption, cmd.class, cmd.args)
+}
+```
+这样我们就已经完成了这个小demo的编写。  
+这也只是我们迈出的第一步，接下来我们要做的就是去加载类文件了。
+
+## 二、搜索class文件
+在上一讲中，我们实现了通过传入命令的方式去启动java的虚拟机，或者查看版本等功能，那么这一讲主要就是通过程序告诉你虚拟机是如何加载一个class文件的。  
+### 类路径
+Java虚拟机规范虽然没有规定虚拟机从哪里寻找类，这里使用的是Oracle的Java虚拟机实现根据类路径来搜素，依次按照
+1. 启动类路径
+   + 默认对应的是jre/lib目录，Java标准中大部分的库也都在这里
+2. 扩展类路径
+   + 默认对应在jre/lib/ext目录下，Java的扩展类一般都在这里
+3. 用户类路径  
+   + 存放自己实现的类与第三方的类库，一般可以通过xbootclasspatch选项修改启动类路径
+   + 一般默认是.路径
+   + 一般使用-cp/-classpath来修改用户此次运行的时候的默认路径
+   + 可指定目录，JAR,ZIP等文件
+   + 也可以指定多个文件和目录
+   + 也可以使用通配符*来指定某个目录下的所有JAR文件
+### 准备工作
+配置路径，在上一讲中原来的路径的基础上，创建ch02，并将ch01中的文件拷贝进ch02中  
+|-jvmgo  
+  |-ch01  
+  |-ch02  
+    |-classpath  
+    |-cmd.go  
+    |-main.go  
+打开cmd.go,为结构体添加一个字段变成如下：
+```go
+//类似于java中类
+type Cmd struct {
+	helpFlag    bool
+	versionFlag bool
+	cpOption    string
+	XjreOption string //添加的字段，是用来接受指定的路径的
+	class       string
+	args        []string
+}
+```
+添加一个解析该Xjre的语句  
+```go
+flag.Usage = printUsage
+	//如果是-help，那么显示这个，并将结果赋值给cmd结构体中的helpFlag，下面的大致都如此
+	flag.BoolVar(&cmd.helpFlag, "help", false, "print help message")
+	flag.BoolVar(&cmd.helpFlag, "?", false, "print help message")
+	flag.BoolVar(&cmd.versionFlag, "version", false, "print version and exit")
+	flag.StringVar(&cmd.cpOption, "classpath", "", "classpath")
+	flag.StringVar(&cmd.cpOption, "cp", "", "classpath")
+	//这一条
+	flag.StringVar(&cmd.XjreOption,"Xjre","","path to jre")
+	flag.Parse()  
+```
+现在的cmd.go长这样
+```go
+package main
+
+//引包
+import "flag"
+import "fmt"
+import "os"
+
+//类似于java中类
+type Cmd struct {
+	helpFlag    bool
+	versionFlag bool
+	cpOption    string
+	XjreOption string
+	class       string
+	args        []string
+}
+
+//方法
+func parseCmd() *Cmd {
+	//new一个Cmd
+	cmd := &Cmd{}
+
+	//调用方法
+	flag.Usage = printUsage
+	//如果是-help，那么显示这个，并将结果赋值给cmd结构体中的helpFlag，下面的大致都如此
+	flag.BoolVar(&cmd.helpFlag, "help", false, "print help message")
+	flag.BoolVar(&cmd.helpFlag, "?", false, "print help message")
+	flag.BoolVar(&cmd.versionFlag, "version", false, "print version and exit")
+	flag.StringVar(&cmd.cpOption, "classpath", "", "classpath")
+	flag.StringVar(&cmd.cpOption, "cp", "", "classpath")
+	flag.StringVar(&cmd.XjreOption,"Xjre","","path to jre")
+	flag.Parse()
+
+
+	args := flag.Args()
+	//如果args的长度大于0
+	if len(args) > 0 {
+		//将args[0]取出
+		cmd.class = args[0]
+		//
+		cmd.args = args[1:]
+	}
+
+	return cmd
+}
+
+func printUsage() {
+	fmt.Printf("Usage: %s [-options] class [args...]\n", os.Args[0])
+	//flag.PrintDefaults()
+}
+```
+### 实现具体方法
+我们现在要想，如何让它来寻找传进来的class，那就是先从jre/lib，再到jre/ext/lib，再到用户所提供的路径，所以我们也这么来，但是我们还得去解析JAR，ZIP，遍历目录等操作。  
+#### 定义一个Entry接口
+将这个文件定义在classpath下，它的作用就如同Java中的接口一样，实现特定的一个类，然后重写方法，也用貌似Java中”多态“的感觉  
+代码如下：  
+**entry.go**  
+```go
+package classpath
+
+import "os"
+import "strings"
+
+//用于路径分隔符
+const pathListSeparartor = string(os.PathListSeparator)
+
+type Entry interface {
+	//负责寻找和加载class文件
+	//参数是class文件的相对路径，路径之间用斜线（/）分隔，文件名有.class后缀
+	//返回值是读到的字节数据、最终定位到class文件的Entry，以及错误信息
+	readClass(className string)([]byte,Entry,error)
+	//相当于Java中的tostring()
+	String() string
+}
+
+func newEntry(path string) Entry {
+	//看输入的path中是否有该系统的分隔符
+	if strings.Contains(path,pathListSeparartor){
+		return newCompositeEntry(path)
+	}
+	//查看路径是否后缀有*
+	if strings.HasSuffix(path,"*"){
+		return newWildcardEntry(path)
+	}
+	//看是否为jar包或者zip包
+	if strings.HasSuffix(path, ".jar") || strings.HasSuffix(path, ".JAR") ||
+		strings.HasSuffix(path, ".zip") || strings.HasSuffix(path,".ZIP"){
+		return newZipEntry(path)
+	}
+	return newDirEntry(path)
+}
+
+```
+#### DirEntry，对应解虚普通路径的Entry
+在4种形式中，这个实现对应的就是很普通的路径，如：
+> c:/programmer/java1.8/jre   
+
+在此顺带一提的就是，在Go语言中，类对接口的实现不用写什么，直接去实现对应的方法就ok了，该go中的逻辑与实现过程都在代码中有注释，就不再做过多的解释
+```go
+package classpath
+
+import "io/ioutil"
+import "path/filepath"
+
+type DirEntry struct {
+	absDir string
+}
+
+//在文中将其当作构造函数使用
+func newDirEntry(path string)  *DirEntry{
+	//将路径转为绝对路径
+	absDir, err := filepath.Abs(path)
+	if err != nil {
+		//如果出现错误，则调用panic种植程序
+		panic(err)
+	}
+	//没有错误创建实例并返回
+	return &DirEntry{absDir}
+}
+
+//这个是go语言里面的函数
+func (self *DirEntry) readClass(className string) ([]byte , Entry, error) {
+	//将目录和class文件名拼成一个完整的路径
+	fileName := filepath.Join(self.absDir,className)
+	//读class文件的内容
+	data, err := ioutil.ReadFile(fileName)
+	//返回内容，实体，以及错误
+	return data, self, err
+}
+
+func (self *DirEntry) String() string  {
+	//返回路径
+	return self.absDir
+}
+#### ZipEntry
+在4中形式中，这个实现对应的是后缀为.JAR或.ZIP的这种路径，如:  
+> c:/programmer/system64/test.jar
+
+
+```
+
+
+
+
+
+
+
+  
+
+  
+
+[1]: https:qiniuyun.ningdali.com/blog/19620jvm.png	"java自带的"
+
+[2]: https:qiniuyun.ningdali.com/blog/19620jvm1.png	"我们需要实现的"
+
